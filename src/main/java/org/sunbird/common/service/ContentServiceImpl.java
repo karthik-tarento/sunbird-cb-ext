@@ -32,7 +32,7 @@ public class ContentServiceImpl implements ContentService {
 	public SunbirdApiResp getHeirarchyResponse(String contentId) {
 		StringBuilder url = new StringBuilder();
 		url.append(serverConfig.getContentHost()).append(serverConfig.getHierarchyEndPoint()).append("/" + contentId)
-				.append("?hierarchyType=detail");
+				.append("?mode=edit");
 		SunbirdApiResp response = mapper.convertValue(outboundRequestHandlerService.fetchResult(url.toString()),
 				SunbirdApiResp.class);
 		if (response.getResponseCode().equalsIgnoreCase("Ok")) {

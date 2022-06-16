@@ -157,17 +157,20 @@ public class SunbirdApiHierarchyResultContent {
 	// public void setBatches(List<SunbirdApiBatchResp> batches) {
 	// 	this.batches = batches;
 	// }
-	public void setBatches(Object batches) throws JsonParseException, JsonMappingException, IOException {
+	@SuppressWarnings("unchecked")
+    public void setBatches(Object batches) throws JsonParseException, JsonMappingException, IOException {
         List<SunbirdApiBatchResp> lst = null;
          ObjectMapper mapper = new ObjectMapper();
         if (batches instanceof String) {
             // 2. convert JSON array to List of objects
             lst = Arrays.asList(mapper.readValue(batches.toString(),SunbirdApiBatchResp[].class));
         }else {
-            lst = Arrays.asList((SunbirdApiBatchResp[])batches);
+            System.out.println("else batch ==== ");
+		//        lst = Arrays.asList((SunbirdApiBatchResp[])batches);
+            lst = (List<SunbirdApiBatchResp>) batches;
         }
         this.batches = lst;
-    }	
+    }
 
 	public int getLeafNodesCount() {
 		return leafNodesCount;

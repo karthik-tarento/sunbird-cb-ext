@@ -158,7 +158,7 @@ public class SunbirdApiHierarchyResultContent {
 	// 	this.batches = batches;
 	// }
 	@SuppressWarnings("unchecked")
-    public void setBatches(Object batches) throws JsonParseException, JsonMappingException, IOException {
+/*    public void setBatches(Object batches) throws JsonParseException, JsonMappingException, IOException {
         List<SunbirdApiBatchResp> lst = null;
          ObjectMapper mapper = new ObjectMapper();
         if (batches instanceof String) {
@@ -167,7 +167,23 @@ public class SunbirdApiHierarchyResultContent {
             lst = (List<SunbirdApiBatchResp>) batches;
         }
         this.batches = lst;
-    }
+    } */
+	
+       public void setBatches(Object batches) throws JsonParseException, JsonMappingException, IOException {
+                     
+       if (batches instanceof String) {
+           ObjectMapper mapper = new ObjectMapper();
+           List<SunbirdApiBatchResp> lst = null;
+           // . convert JSON array to List of objects
+           lst = Arrays.asList(mapper.readValue(batches.toString(),SunbirdApiBatchResp[].class));
+           this.batches = lst;
+       }else {
+           String jsonInString = new Gson().toJson(batches);
+           ObjectMapper mapper = new ObjectMapper();
+           List<SunbirdApiBatchResp> lst = Arrays.asList(mapper.readValue(jsonInString.toString(),SunbirdApiBatchResp[].class));
+           this.batches = lst;
+       }
+       }
 
 	public int getLeafNodesCount() {
 		return leafNodesCount;

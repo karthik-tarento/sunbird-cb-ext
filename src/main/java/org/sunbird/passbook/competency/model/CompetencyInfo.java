@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class CompetencyInfo {
 	private String competencyId;
-	private Map<String, String> additionalParam;
+	private Map<String, String> additionalParams;
 	private List<Map<String, Object>> acquiredDetails = new ArrayList<Map<String, Object>>();
 
 	public CompetencyInfo(String competencyId) {
@@ -21,12 +21,12 @@ public class CompetencyInfo {
 		this.competencyId = competencyId;
 	}
 
-	public Map<String, String> getAdditionalParam() {
-		return additionalParam;
+	public Map<String, String> getAdditionalParams() {
+		return additionalParams;
 	}
 
-	public void setAdditionalParam(Map<String, String> additionalParam) {
-		this.additionalParam = additionalParam;
+	public void setAdditionalParams(Map<String, String> additionalParams) {
+		this.additionalParams = additionalParams;
 	}
 
 	public List<Map<String, Object>> getAcquiredDetails() {

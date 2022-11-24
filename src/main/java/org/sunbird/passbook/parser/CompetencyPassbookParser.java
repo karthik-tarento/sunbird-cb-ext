@@ -22,6 +22,7 @@ import org.sunbird.passbook.competency.model.CompetencyInfo;
 import org.sunbird.passbook.competency.model.CompetencyPassbookInfo;
 import org.sunbird.passbook.model.PassbookDBInfo;
 
+import com.datastax.driver.core.utils.UUIDs;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -58,8 +59,8 @@ public class CompetencyPassbookParser implements PassbookParser {
 				competencyInfo = new CompetencyInfo(competencyId);
 			}
 
-			if (ObjectUtils.isEmpty(competencyInfo.getAdditionalParam())) {
-				competencyInfo.setAdditionalParam((Map<String, String>) competencyObj.get(Constants.ADDITIONAL_PARAM));
+			if (ObjectUtils.isEmpty(competencyInfo.getAdditionalParams())) {
+				competencyInfo.setAdditionalParams((Map<String, String>) competencyObj.get(Constants.ADDITIONAL_PARAM));
 			}
 			Map<String, Object> acquiredDetail = new HashMap<String, Object>();
 			acquiredDetail.put(Constants.ACQUIRED_CHANNEL, (String) competencyObj.get(Constants.ACQUIRED_CHANNEL));
@@ -68,6 +69,19 @@ public class CompetencyPassbookParser implements PassbookParser {
 					ProjectUtil.getTimestampFromUUID((UUID) competencyObj.get(Constants.EFFECTIVE_DATE)));
 			acquiredDetail.put(Constants.ADDITIONAL_PARAM,
 					(Map<String, Object>) competencyObj.get(Constants.ACQUIRED_DETAILS));
+			Map<String, Object> acquiredDetailAdditionalParam = (Map<String, Object>) competencyObj
+					.get(Constants.ACQUIRED_DETAILS);
+
+			Iterator<Entry<String, Object>> iterator = acquiredDetailAdditionalParam.entrySet().iterator();
+			while (iterator.hasNext()) {
+				Entry<String, Object> entry = iterator.next();
+				if (entry.getValue() instanceof String) {
+					acquiredDetail.put(entry.getKey(), (String) entry.getValue());
+				} else {
+					// TODO - We need JSON schema config to determine the type of value.
+				}
+			}
+
 			competencyInfo.getAcquiredDetails().add(acquiredDetail);
 			competencyPassbookInfo.getCompetencies().put(competencyId, competencyInfo);
 		}
@@ -196,7 +210,8 @@ public class CompetencyPassbookParser implements PassbookParser {
 
 			String effectiveDate = (String) acquiredDetailsMap.get(Constants.EFFECTIVE_DATE);
 			if (StringUtils.isBlank(effectiveDate)) {
-				missingAttributes.add(Constants.EFFECTIVE_DATE);
+				competency.put(Constants.EFFECTIVE_DATE, UUIDs.timeBased());
+				// missingAttributes.add(Constants.EFFECTIVE_DATE);
 			} else {
 				UUID effectiveDateUUID = ProjectUtil.getUUIDFromTimeStamp(effectiveDate);
 				if (effectiveDateUUID == null) {

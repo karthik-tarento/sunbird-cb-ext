@@ -19,7 +19,6 @@ import org.sunbird.common.model.SBApiResponse;
 import org.sunbird.common.util.CbExtServerProperties;
 import org.sunbird.common.util.Constants;
 import org.sunbird.common.util.ProjectUtil;
-import org.sunbird.passbook.model.PassbookDBInfo;
 import org.sunbird.passbook.parser.PassbookParser;
 import org.sunbird.passbook.parser.PassbookParserHandler;
 
